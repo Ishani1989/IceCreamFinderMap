@@ -2,15 +2,15 @@
 
   .right{
     float: right;
-    width: 75%;
+    width: 80%;
     height: 90%;
   }
 
   .left{
     float: left;
-    width:25%;
+    width:20%;
     height: 90%;
-    background-color: yellow; 
+    background-color: #B5DE73; 
   }
 
   html, body{
@@ -21,4 +21,10 @@
     height:10%;
     width: 100%;
     text-align: center;
+    background-image: url("icecrmbackground.jpg");
+
   }
+
+  li:hover { 
+    background-color: white;
+}
