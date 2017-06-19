@@ -2,6 +2,12 @@ var map;
 // Create a new blank array for all the listing markers.
 var markers = [];
 
+var Location = function(data) {
+        this.title = ko.observable(data.title);
+        this.lat = ko.observable(data.location.lat);
+        this.lng = ko.observable(data.location.lng);
+}
+
 var locations = [{
         title: 'San Francisco',
         location: {
@@ -165,6 +171,79 @@ var locations = [{
     }
 ];
 
+var nViewModel = function() {
+    self = this;
+    this.heading = ko.observable("My Caltrain Ice Cream Finder");
+
+    this.mylocations = ko.observableArray([]);
+
+    //Loop within the global variable initialCats defined and push them in the observable array
+    locations.forEach(function(place) {
+        console.log(place);
+        self.mylocations.push(new Location(place));
+    });
+
+
+    this.setMap = function(location){
+            var lat = "";
+            var lng = "";
+        //alert($(this).text());
+        for (var i = 0; i < self.mylocations().length-1; i++) {
+            if (self.mylocations()[i].title() === location.title()) {
+                lat = location.lat();
+                lng = location.lng();
+
+                console.log('Found Location');
+                console.log(lat + ' :: ' + lng);
+                break;
+            }
+        }
+        map.setCenter(new google.maps.LatLng(lat, lng));
+        map.setZoom(15);
+        date = "20161016"
+        var token = "EGIVZV20P2M153FGX3NIDOIKWX1QOXXUNEOQPZNFKGWUIVMF"
+        var foursqrurl="https://api.foursquare.com/v2/venues/search?oauth_token="+token+"&v="+date+"&ll="+lat+','+lng+"&query=ice%20cream&intent=checkin&limit=5&radius=2000";
+        console.log(foursqrurl);
+
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": foursqrurl,
+            "method": "GET"
+        }
+
+        $.ajax(settings).done(function(response) {
+          for(var ind in response.response.venues){
+            console.log("*****************");
+            venue = response.response.venues[ind];
+            var resname = venue.name;
+            var reslat = venue.location.lat;
+            var reslng = parseFloat(venue.location.lng);
+            var resloc = {
+              lat: reslat,
+              lng: reslng
+            }
+            var largeInfowindow = new google.maps.InfoWindow(); 
+            var marker = new google.maps.Marker({
+              map: map,
+              position: resloc,
+              title: resname,
+              icon: 'mapicon.png'
+            });
+            markers.push(marker);
+            marker.addListener('click', function() {
+              populateInfoWindow(this, largeInfowindow);
+            });
+            console.log(resname);
+            console.log('reslat - ' + reslng );
+            console.log('reslng - ' + resloc.lng);
+          }//end for
+        });//end ajax call
+        }
+};
+
+ko.applyBindings(new nViewModel());
+
 function initMap() {
     // Constructor creates a new map - only center and zoom are required.
     var geocoder = new google.maps.Geocoder();
@@ -212,63 +291,3 @@ function populateInfoWindow(marker, infowindow) {
           });
         }
 }
-$(document).ready(function() {
-    $('.stationnames li').click(function() {
-        var location = $(this).text();
-        var loc = "";
-        //alert($(this).text());
-        for (var i = 0; i < locations.length; i++) {
-            if (locations[i].title === location) {
-                loc = locations[i].location;
-                console.log('Found Location');
-                console.log(loc);
-                break;
-            }
-        }
-        map.setCenter(loc);
-        map.setZoom(15);
-        date = "20161016"
-        var token = "EGIVZV20P2M153FGX3NIDOIKWX1QOXXUNEOQPZNFKGWUIVMF"
-        var foursqrurl="https://api.foursquare.com/v2/venues/search?oauth_token="+token+"&v="+date+"&ll="+loc.lat+','+loc.lng+"&query=ice%20cream&intent=checkin&limit=5&radius=2000";
-        console.log(foursqrurl);
-
-        var settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": foursqrurl,
-            "method": "GET"
-        }
-
-        $.ajax(settings).done(function(response) {
-          for(var ind in response.response.venues){
-            console.log("*****************");
-            venue = response.response.venues[ind];
-            var resname = venue.name;
-            var reslat = venue.location.lat;
-            var reslng = parseFloat(venue.location.lng);
-            var resloc = {
-              lat: reslat,
-              lng: reslng
-            }
-            var largeInfowindow = new google.maps.InfoWindow(); 
-            var marker = new google.maps.Marker({
-              map: map,
-              position: resloc,
-              title: resname,
-              icon: 'mapicon.png'
-            });
-            markers.push(marker);
-            marker.addListener('click', function() {
-              populateInfoWindow(this, largeInfowindow);
-            });
-            console.log(resname);
-            console.log('reslat - ' + reslng );
-            console.log('reslng - ' + resloc.lng);
-          }//end for
-        });//end ajax call
-    });
-
-
-
-
-});
