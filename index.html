@@ -1,45 +1,24 @@
 <!DOCTYPE html>
 <html>
-  <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src = code.js></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9h_dzskR64wDAx9wBmATcu4Ik8lRsNrg&v=3&libraries=geometry&callback=initMap">
-  </script>
-  <script src ="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="styles.css">
-  </head>
-  <body>
-  	<div class = "strip">
-  		<h1>Caltrain Ice Cream Finder</h1>
-  	</div>
+   <head>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src ="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+      <script async defer src ="code.js"></script>
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9h_dzskR64wDAx9wBmATcu4Ik8lRsNrg&v=3&libraries=geometry&callback=initMap"></script>
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="styles.css">
+   </head>
+   <body>
+      <div class = "strip">
+         <h1 data-bind="text:heading"></h1>
+      </div>
       <div id="map" class="right"></div>
       <div class="left">
-
-        <ul class="stationnames list-group">
-      		<li class="list-group-item"><a href="#">San Francisco </a></li>
-      		<li class="list-group-item"><a href="#">22nd Street </a></li>
-      		<li class="list-group-item"><a href="#">Bayshore</a></li>
-      		<li class="list-group-item"><a href="#">San Bruno</a></li>
-      		<li class="list-group-item"><a href="#">Milbrae Transit</a></li>
-      		<li class="list-group-item"><a href="#">Broadway</a></li>
-      		<li class="list-group-item"><a href="#">Burlingame</a></li>
-      		<li class="list-group-item"><a href="#">San Mateo</a></li>
-      		<li class="list-group-item"><a href="#">Hayward Park</a></li>
-      		<li class="list-group-item"><a href="#">Hillsdale</a></li>
-      		<li class="list-group-item"><a href="#">Belmont</a></li>
-      		<li class="list-group-item"><a href="#">San Carlos</a></li>
-      		<li class="list-group-item"><a href="#">Redwood city</a></li>
-      		<li class="list-group-item"><a href="#">Atherton</a></li>
-      		<li class="list-group-item"><a href="#">Menlo park</a></li>
-      		<li class="list-group-item"><a href="#">Palo Alto</a></li>
-      		<li class="list-group-item"><a href="#">California Ave</a></li>
-      		<li class="list-group-item"><a href="#">San Antonio</a></li>
-      		<li class="list-group-item"><a href="#">Mountain View</a></li>
-      	</ul>
+         <ul class="stationnames list-group" data-bind = "foreach:mylocations">
+            <a href="#" class="list-group-item list-group-item-action" data-bind = "text:title, click:$parent.setMap"></a>
+         </ul>
       </div>
-
-  </div>
-</div>
-  </body>
+      </div>
+      </div>
+   </body>
 </html>

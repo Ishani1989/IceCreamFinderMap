@@ -172,7 +172,7 @@ var locations = [{
 ];
 
 var nViewModel = function() {
-    self = this;
+    var self = this;
     this.heading = ko.observable("My Caltrain Ice Cream Finder");
 
     this.mylocations = ko.observableArray([]);
