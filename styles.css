@@ -10,7 +10,8 @@
     float: left;
     width:20%;
     height: 90%;
-    background-color: #B5DE73; 
+    background-color: #FFFFFF; 
+    overflow-y:scroll;
   }
 
   html, body{
@@ -21,10 +22,38 @@
     height:10%;
     width: 100%;
     text-align: center;
-    background-image: url("icecrmbackground.jpg");
-
+    background-image: url("pic.jpg");
+    padding: 0px;     
   }
 
-  li:hover { 
-    background-color: white;
+  a:hover { 
+    background-color: green;
+    color: red;
+}
+
+.list-group-item
+{  
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.list-group-item-action{
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.row::before{
+   content: none;
+}
+
+.container::before{
+   content: none;
 }
