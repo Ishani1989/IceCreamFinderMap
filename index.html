@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
       <script src ="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
       <script async defer src ="code.js"></script>
@@ -10,15 +12,17 @@
    </head>
    <body style="height: 100%; padding: 0px; margin: 0px">
       <div class = "strip">
-         <h1 data-bind="text:heading" style="margin-top: 0;"></h1>
+         <h1 data-bind="text:heading"></h1>
       </div>
       <div id="map" class="right"></div>
       <div class="left">
+         <input placeholder="Search…" type="search" data-bind="value: query, input: mylocations, valueUpdate: 'keyup'," autocomplete="off">
+         <!--<input id="search" type="button" value="Search" data-bind="click:search.bind($data,query,mylocations)">-->
+         
+
          <ul class="stationnames list-group" data-bind = "foreach:mylocations">
             <a href="#" class="list-group-item list-group-item-action" data-bind = "text:title, click:$parent.setMap"></a>
          </ul>
-      </div>
-      </div>
       </div>
    </body>
 </html>
