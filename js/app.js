@@ -1,3 +1,14 @@
+// Hello.
+//
+// This is JSHint, a tool that helps to detect errors and potential
+// problems in your JavaScript code.
+//
+// To start, simply enter some JavaScript anywhere on this page. Your
+// report will appear on the right side.
+//
+// Additionally, you can toggle specific options in the Configure
+// menu.
+
 //create variable map to be rendered on view
 var map;
 // Create a new blank array for all the listing markers.
@@ -7,7 +18,7 @@ var Location = function(data) {
     this.title = ko.observable(data.title);
     this.lat = ko.observable(data.location.lat);
     this.lng = ko.observable(data.location.lng);
-}
+};
 
 //Create static data for initial load of locations
 var locations = [{
@@ -180,10 +191,10 @@ var mm = today.getMonth() + 1; //January is 0!
 var yyyy = today.getFullYear();
 
 if (dd < 10) {
-    dd = '0' + dd
+    dd = '0' + dd;
 }
 if (mm < 10) {
-    mm = '0' + mm
+    mm = '0' + mm;
 }
 today = yyyy + mm + dd;
 
@@ -217,7 +228,7 @@ var nViewModel = function() {
         map.setCenter(new google.maps.LatLng(lat, lng));
         map.setZoom(15);
         date = today;
-        var token = "EGIVZV20P2M153FGX3NIDOIKWX1QOXXUNEOQPZNFKGWUIVMF"
+        var token = "EGIVZV20P2M153FGX3NIDOIKWX1QOXXUNEOQPZNFKGWUIVMF";
         var foursqrurl = "https://api.foursquare.com/v2/venues/search?oauth_token=" + token + "&v=" + date + "&ll=" + lat + ',' + lng + "&query=ice%20cream&intent=checkin&limit=5&radius=2000";
 
         var settings = {
@@ -225,7 +236,8 @@ var nViewModel = function() {
             "crossDomain": true,
             "url": foursqrurl,
             "method": "GET"
-        }
+        };
+      
         //Handle error for AJAX request
         $(document).ajaxError(
             function(event, jqXHR, ajaxSettings, thrownError) {
@@ -241,7 +253,7 @@ var nViewModel = function() {
                 var resloc = {
                     lat: reslat,
                     lng: reslng
-                }
+                };
 
                 //display response location with custom marker on map
                 var largeInfowindow = new google.maps.InfoWindow();
@@ -257,7 +269,7 @@ var nViewModel = function() {
                 });
             } //end for
         }); //end ajax call
-    }
+    };
 
     //declare query for search as observable to be populated dynamically from our view
     this.query = ko.observable('');
@@ -282,8 +294,9 @@ var nViewModel = function() {
         if (value === "") {
             initMap();
         }
-    } // end search
+    }; // end search
 }; //end viewmodel
+
 var myViewModel = new nViewModel();
 // perform search query on nView model
 myViewModel.query.subscribe(myViewModel.search);
@@ -376,7 +389,7 @@ function toggleBounce(marker) {
     marker.setAnimation(google.maps.Animation.BOUNCE);
     marker.addListener('mouseout', function() {
         marker.setAnimation(null);
-    })
+    });
 }
 
 function makeMarkerIcon(markerColor) {
