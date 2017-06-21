@@ -9,7 +9,7 @@ var Location = function(data) {
     this.lng = ko.observable(data.location.lng);
 }
 
-//Create static data
+//Create static data for initial load of locations
 var locations = [{
         title: 'San Francisco',
         location: {
@@ -20,8 +20,8 @@ var locations = [{
     {
         title: '22nd Street',
         location: {
-            lat: 37.755845,
-            lng: -122.412226
+            lat: 37.7575,
+            lng: -122.3924
         }
     },
     {
@@ -53,7 +53,7 @@ var locations = [{
         }
     },
     {
-        title: 'Broadway Weekend only',
+        title: 'Broadway',
         location: {
             lat: 37.795939,
             lng: -122.421890
@@ -196,7 +196,7 @@ var nViewModel = function() {
 
     this.mylocations = ko.observableArray([]);
 
-    //Loop within the global variable initialCats defined and push them in the observable array
+    //Loop within the global variable locations defined and push them in the observable array
     locations.forEach(function(place) {
         self.mylocations.push(new Location(place));
     });
@@ -213,6 +213,7 @@ var nViewModel = function() {
                 break;
             }
         }
+        //set the center of the map and other tokens for Foursquare API Call
         map.setCenter(new google.maps.LatLng(lat, lng));
         map.setZoom(15);
         date = today;
@@ -225,7 +226,12 @@ var nViewModel = function() {
             "url": foursqrurl,
             "method": "GET"
         }
-
+        //Handle error for AJAX request
+        $(document).ajaxError(
+        function (event, jqXHR, ajaxSettings, thrownError) {
+            $(".error").html("The server responded with "+thrownError.toLowerCase()+" error. Please check all parameters and try again");
+    });
+        // parse AJAX response to display on map
         $.ajax(settings).done(function(response) {
             for (var ind in response.response.venues) {
                 venue = response.response.venues[ind];
@@ -237,6 +243,7 @@ var nViewModel = function() {
                     lng: reslng
                 }
 
+                //display response location with custom marker on map
                 var largeInfowindow = new google.maps.InfoWindow();
                 var marker = new google.maps.Marker({
                     map: map,
@@ -251,27 +258,34 @@ var nViewModel = function() {
             } //end for
         }); //end ajax call
     }
+
+    //declare query for search as observable to be populated dynamically from our view
     this.query = ko.observable('');
 
+    //define the live search function
     this.search= function(value) {
-        console.log('Searched value - ' + value);
-        // remove all the current beers, which removes them from the view
+        // remove all the current locations, which removes them from the view
         self.mylocations.removeAll();
-
+        // populate the empty observable array with locations that matched our query
         for (var loc in locations)   {
             if (locations[loc].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
                 self.mylocations.push(new Location(locations[loc]));
             }//end if
         }//end for
+
+        //set markers on map for each searched location
         for (var i = 0; i < markers.length; i++) {
           markers[i].setMap(null);
         }
         markers = []; 
         updateMapBasedOnFilterLocations(self.mylocations);
+        if(value===""){
+            initMap();
+        }    
     }// end search
 };//end viewmodel
 var myViewModel = new nViewModel();
-
+// perform search query on nView model
 myViewModel.query.subscribe(myViewModel.search);
 ko.applyBindings(myViewModel);
 
@@ -287,8 +301,6 @@ function initMap() {
         },
         zoom: 11
     });
-    // These are the real estate listings that will be shown to the user.
-    // Normally we'd have these in a database instead.
     var highlightedIcon = makeMarkerIcon('642EFE');
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
@@ -308,7 +320,7 @@ function initMap() {
         marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
         });
-
+        //  added custom animation for marker
         marker.addListener('mouseover', function() {
             this.setIcon(highlightedIcon);
             toggleBounce(this);
@@ -318,9 +330,6 @@ function initMap() {
 } //end initMap function
 
 function updateMapBasedOnFilterLocations(locations) {
-    console.log('updateMapBasedOnFilterLocations');
-    // These are the real estate listings that will be shown to the user.
-    // Normally we'd have these in a database instead.
     var highlightedIcon = makeMarkerIcon('642EFE');
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
@@ -330,7 +339,8 @@ function updateMapBasedOnFilterLocations(locations) {
         var lat = locations()[i].lat();
         var lng = locations()[i].lng();
         var title = locations()[i].title();
-
+        map.setCenter(new google.maps.LatLng(lat, lng));
+        map.setZoom(15);
         var marker = new google.maps.Marker({
             map: map,
             position: new google.maps.LatLng(lat, lng),
@@ -350,6 +360,7 @@ function updateMapBasedOnFilterLocations(locations) {
 
 } //end initMap function
 
+//function to populate the infowindow on click
 function populateInfoWindow(marker, infowindow) {
     // Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
@@ -362,7 +373,7 @@ function populateInfoWindow(marker, infowindow) {
         });
     }
 }
-
+//added custom animation to marker
 function toggleBounce(marker) {
     marker.setAnimation(google.maps.Animation.BOUNCE);
     marker.addListener('mouseout', function() {
