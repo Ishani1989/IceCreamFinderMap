@@ -22,7 +22,6 @@
       text-align: center;
       background-image: url("../static/headerimg.jpg");
       padding: 0px;
-      border: 2px solid blue;
   }
   /*css changes for list item hover*/
   a.list-group-item-action:hover {
