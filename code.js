@@ -27,8 +27,8 @@ var locations = [{
     {
         title: 'Bayshore',
         location: {
-            lat: 37.467040,
-            lng: -122.151928
+            lat: 37.7076,
+            lng: -122.4017
         }
     },
     {
@@ -205,7 +205,8 @@ var nViewModel = function() {
     this.setMap = function(location) {
         var lat = "";
         var lng = "";
-        for (var i = 0; i < self.mylocations().length - 1; i++) {
+
+        for (var i = 0; i < self.mylocations().length; i++) {
             if (self.mylocations()[i].title() === location.title()) {
                 lat = location.lat();
                 lng = location.lng();
@@ -262,14 +263,12 @@ var nViewModel = function() {
                 self.mylocations.push(new Location(locations[loc]));
             }//end if
         }//end for
+        for (var i = 0; i < markers.length; i++) {
+          markers[i].setMap(null);
+        }
+        markers = []; 
+        updateMapBasedOnFilterLocations(self.mylocations);
     }// end search
-/*
-    this.linkClick = function (cargo, query) {
-        alert(cargo);
-        console.log(cargo);
-        console.log('query'+query);
-    };
-*/
 };//end viewmodel
 var myViewModel = new nViewModel();
 
@@ -303,6 +302,39 @@ function initMap() {
             position: location,
             title: title,
             animation: google.maps.Animation.DROP,
+            id: i
+        });
+        markers.push(marker);
+        marker.addListener('click', function() {
+            populateInfoWindow(this, largeInfowindow);
+        });
+
+        marker.addListener('mouseover', function() {
+            this.setIcon(highlightedIcon);
+            toggleBounce(this);
+        });
+    }
+
+} //end initMap function
+
+function updateMapBasedOnFilterLocations(locations) {
+    console.log('updateMapBasedOnFilterLocations');
+    // These are the real estate listings that will be shown to the user.
+    // Normally we'd have these in a database instead.
+    var highlightedIcon = makeMarkerIcon('642EFE');
+    var largeInfowindow = new google.maps.InfoWindow();
+    var bounds = new google.maps.LatLngBounds();
+    // The following group uses the location array to create an array of markers on initialize.
+    for (var i = 0; i < locations().length; i++) {
+        // Get the position from the location array.
+        var lat = locations()[i].lat();
+        var lng = locations()[i].lng();
+        var title = locations()[i].title();
+
+        var marker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(lat, lng),
+            title: title,
             id: i
         });
         markers.push(marker);

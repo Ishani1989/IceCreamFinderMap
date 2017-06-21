@@ -16,13 +16,14 @@
       </div>
       <div id="map" class="right"></div>
       <div class="left">
-         <input placeholder="Search…" type="search" data-bind="value: query, input: mylocations, valueUpdate: 'keyup'," autocomplete="off">
-         <!--<input id="search" type="button" value="Search" data-bind="click:search.bind($data,query,mylocations)">-->
-         
-
-         <ul class="stationnames list-group" data-bind = "foreach:mylocations">
-            <a href="#" class="list-group-item list-group-item-action" data-bind = "text:title, click:$parent.setMap"></a>
-         </ul>
+         <div class ="search">
+            <input id ="searchtext" placeholder="Search…" type="search" data-bind="value: query, input: mylocations, valueUpdate: 'keyup'," autocomplete="off">
+         </div>
+         <div class = "scroll">
+            <ul class="list-group" data-bind = "foreach:mylocations">
+               <a href="#" class="list-group-item list-group-item-action" data-bind = "text:title, click:$parent.setMap"></a>
+            </ul>
+         </div>
       </div>
    </body>
 </html>
