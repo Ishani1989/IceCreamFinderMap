@@ -264,9 +264,7 @@ var nViewModel = function() {
                     icon: 'static/icrm.jpg'
                 });
                 markers.push(marker);
-                marker.addListener('click', function() {
-                    populateInfoWindow(this, largeInfowindow);
-                });
+                populateInfoWindow(this, largeInfowindow);
             } //end for
         }); //end ajax call
     };
@@ -326,18 +324,15 @@ function initMap() {
             title: title,
             animation: google.maps.Animation.DROP,
             id: i
-        });
-        markers.push(marker);
-        marker.addListener('click', function() {
-            populateInfoWindow(this, largeInfowindow);
-        });
-        //  added custom animation for marker
-        marker.addListener('mouseover', function() {
-            this.setIcon(highlightedIcon);
-            toggleBounce(this);
-        });
-    }
+        }); 
 
+        markers.push(marker);
+        //  added custom animation for marker
+        toggleBounce(marker, highlightedIcon);
+        populateInfoWindow(marker, largeInfowindow);
+        
+    }
+    
 } //end initMap function
 
 function updateMapBasedOnFilterLocations(locations) {
@@ -359,14 +354,8 @@ function updateMapBasedOnFilterLocations(locations) {
             id: i
         });
         markers.push(marker);
-        marker.addListener('click', function() {
-            populateInfoWindow(this, largeInfowindow);
-        });
-
-        marker.addListener('mouseover', function() {
-            this.setIcon(highlightedIcon);
-            toggleBounce(this);
-        });
+        toggleBounce(marker, highlightedIcon);
+        populateInfoWindow(marker, largeInfowindow);
     }
 
 } //end initMap function
@@ -374,19 +363,24 @@ function updateMapBasedOnFilterLocations(locations) {
 //function to populate the infowindow on click
 function populateInfoWindow(marker, infowindow) {
     // Check to make sure the infowindow is not already opened on this marker.
-    if (infowindow.marker != marker) {
-        infowindow.marker = marker;
-        infowindow.setContent('<div>' + marker.title + '</div>');
-        infowindow.open(map, marker);
-        // Make sure the marker property is cleared if the infowindow is closed.
-        infowindow.addListener('closeclick', function() {
-            infowindow.setMarker = null;
-        });
-    }
+    marker.addListener('click', function() {
+        if (infowindow.marker != marker) {
+            infowindow.marker = marker;
+            infowindow.setContent('<div>' +"Welcome to "+marker.title + '</div>');
+            infowindow.open(map, marker);
+            // Make sure the marker property is cleared if the infowindow is closed.
+            infowindow.addListener('closeclick', function() {
+                infowindow.setMarker = null;
+            });
+        }
+    });
 }
 //added custom animation to marker
-function toggleBounce(marker) {
-    marker.setAnimation(google.maps.Animation.BOUNCE);
+function toggleBounce(marker, icon) {
+    marker.addListener('mouseover', function() {
+        marker.setIcon(icon);
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+    });
     marker.addListener('mouseout', function() {
         marker.setAnimation(null);
     });
