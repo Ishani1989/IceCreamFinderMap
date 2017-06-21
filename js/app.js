@@ -11,161 +11,161 @@ var Location = function(data) {
 
 //Create static data for initial load of locations
 var locations = [{
-        title: "San Francisco",
+        title: 'San Francisco',
         location: {
             lat: 37.774929,
             lng: -122.419416
         }
     },
     {
-        title: "22nd Street",
+        title: '22nd Street',
         location: {
             lat: 37.7575,
             lng: -122.3924
         }
     },
     {
-        title: "Bayshore",
+        title: 'Bayshore',
         location: {
             lat: 37.7076,
             lng: -122.4017
         }
     },
     {
-        title: "South San Francisco",
+        title: 'South San Francisco',
         location: {
             lat: 37.654656,
             lng: -122.407750
         }
     },
     {
-        title: "San Bruno",
+        title: 'San Bruno',
         location: {
             lat: 37.630490,
             lng: -122.411084
         }
     },
     {
-        title: "Millbrae Transit Center",
+        title: 'Millbrae Transit Center',
         location: {
             lat: 37.600156,
             lng: -122.386936
         }
     },
     {
-        title: "Broadway",
+        title: 'Broadway',
         location: {
             lat: 37.795939,
             lng: -122.421890
         }
     },
     {
-        title: "Burlingame",
+        title: 'Burlingame',
         location: {
             lat: 37.577870,
             lng: -122.348090
         }
     },
     {
-        title: "San Mateo",
+        title: 'San Mateo',
         location: {
             lat: 37.562992,
             lng: -122.325525
         }
     },
     {
-        title: "Hillsdale",
+        title: 'Hillsdale',
         location: {
             lat: 37.781611,
             lng: -122.409347
         }
     },
     {
-        title: "Belmont",
+        title: 'Belmont',
         location: {
             lat: 37.525016,
             lng: -122.266873
         }
     },
     {
-        title: "San Carlos",
+        title: 'San Carlos',
         location: {
             lat: 37.507159,
             lng: -122.260522
         }
     },
     {
-        title: "Redwood City",
+        title: 'Redwood City',
         location: {
             lat: 37.485215,
             lng: -122.236355
         }
     },
     {
-        title: "Atherton",
+        title: 'Atherton',
         location: {
             lat: 37.461327,
             lng: -122.197743
         }
     },
     {
-        title: "Menlo Park",
+        title: 'Menlo Park',
         location: {
             lat: 37.452960,
             lng: -122.181725
         }
     },
     {
-        title: "Palo Alto",
+        title: 'Palo Alto',
         location: {
             lat: 37.441883,
             lng: -122.143019
         }
     },
     {
-        title: "California Ave.",
+        title: 'California Ave.',
         location: {
             lat: 37.422846,
             lng: -122.147697
         }
     },
     {
-        title: "San Antonio",
+        title: 'San Antonio',
         location: {
             lat: 37.407221,
             lng: -122.107126
         }
     },
     {
-        title: "Mountain View",
+        title: 'Mountain View',
         location: {
             lat: 37.386052,
             lng: -122.083851
         }
     },
     {
-        title: "Sunnyvale",
+        title: 'Sunnyvale',
         location: {
             lat: 37.378426,
             lng: -122.030778
         }
     },
     {
-        title: "Lawrence",
+        title: 'Lawrence',
         location: {
             lat: 37.370412,
             lng: -121.995984
         }
     },
     {
-        title: "Santa Clara",
+        title: 'Santa Clara',
         location: {
             lat: 37.353227,
             lng: -121.936453
         }
     },
     {
-        title: "San Jose",
+        title: 'San Jose',
         location: {
             lat: 37.329905,
             lng: -121.902502
@@ -180,17 +180,14 @@ var mm = today.getMonth() + 1; //January is 0!
 var yyyy = today.getFullYear();
 
 if (dd < 10) {
-    dd = "0" + dd;
+    dd = '0' + dd
 }
 if (mm < 10) {
-    mm = "0" + mm;
+    mm = '0' + mm
 }
 today = yyyy + mm + dd;
 
-/* 
- * Name - nViewModel
- * Functionalities- this creates the viewmodel required for knockout rendering of the html
- */
+// Create viewmodel using knockout.js
 var nViewModel = function() {
 
     var self = this;
@@ -204,12 +201,12 @@ var nViewModel = function() {
         self.mylocations.push(new Location(place));
     });
 
-    // this method gets invoked from the UI and sets the current map to the location that has been clicked
+    // set the center as the location clicked
     this.setMap = function(location) {
         var lat = "";
         var lng = "";
 
-        for (i = 0; i < self.mylocations().length; i++) {
+        for (var i = 0; i < self.mylocations().length; i++) {
             if (self.mylocations()[i].title() === location.title()) {
                 lat = location.lat();
                 lng = location.lng();
@@ -221,7 +218,7 @@ var nViewModel = function() {
         map.setZoom(15);
         date = today;
         var token = "EGIVZV20P2M153FGX3NIDOIKWX1QOXXUNEOQPZNFKGWUIVMF"
-        var foursqrurl = "https://api.foursquare.com/v2/venues/search?oauth_token=" + token + "&v=" + date + "&ll=" + lat + "," + lng + "&query=ice%20cream&intent=checkin&limit=5&radius=2000";
+        var foursqrurl = "https://api.foursquare.com/v2/venues/search?oauth_token=" + token + "&v=" + date + "&ll=" + lat + ',' + lng + "&query=ice%20cream&intent=checkin&limit=5&radius=2000";
 
         var settings = {
             "async": true,
@@ -229,35 +226,33 @@ var nViewModel = function() {
             "url": foursqrurl,
             "method": "GET"
         }
-
         //Handle error for AJAX request
         $(document).ajaxError(
             function(event, jqXHR, ajaxSettings, thrownError) {
                 $(".error").html("The server responded with " + thrownError.toLowerCase() + " error. Please check all parameters and try again");
             });
-
         // parse AJAX response to display on map
         $.ajax(settings).done(function(response) {
-            for (ind in response.response.venues) {
+            for (var ind in response.response.venues) {
                 venue = response.response.venues[ind];
-                resname = venue.name;
-                reslat = venue.location.lat;
-                reslng = parseFloat(venue.location.lng);
-                resloc = {
+                var resname = venue.name;
+                var reslat = venue.location.lat;
+                var reslng = parseFloat(venue.location.lng);
+                var resloc = {
                     lat: reslat,
                     lng: reslng
                 }
 
                 //display response location with custom marker on map
-                largeInfowindow = new google.maps.InfoWindow();
-                marker = new google.maps.Marker({
+                var largeInfowindow = new google.maps.InfoWindow();
+                var marker = new google.maps.Marker({
                     map: map,
                     position: resloc,
                     title: resname,
-                    icon: "static/icrm.jpg"
+                    icon: 'static/icrm.jpg'
                 });
                 markers.push(marker);
-                marker.addListener("click", function() {
+                marker.addListener('click', function() {
                     populateInfoWindow(this, largeInfowindow);
                 });
             } //end for
@@ -265,21 +260,21 @@ var nViewModel = function() {
     }
 
     //declare query for search as observable to be populated dynamically from our view
-    this.query = ko.observable("");
+    this.query = ko.observable('');
 
     //define the live search function
     this.search = function(value) {
         // remove all the current locations, which removes them from the view
         self.mylocations.removeAll();
         // populate the empty observable array with locations that matched our query
-        for (loc in locations) {
+        for (var loc in locations) {
             if (locations[loc].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
                 self.mylocations.push(new Location(locations[loc]));
             } //end if
         } //end for
 
         //set markers on map for each searched location
-        for (i = 0; i < markers.length; i++) {
+        for (var i = 0; i < markers.length; i++) {
             markers[i].setMap(null);
         }
         markers = [];
@@ -289,36 +284,30 @@ var nViewModel = function() {
         }
     } // end search
 }; //end viewmodel
-
 var myViewModel = new nViewModel();
 // perform search query on nView model
 myViewModel.query.subscribe(myViewModel.search);
 ko.applyBindings(myViewModel);
 
-/* 
- * Name - initMap
- * Functionalities- gets invoked from UI on load of Google Maps API script
- * loads map into the UI with id as "map"
- */
 function initMap() {
     // Constructor creates a new map - only center and zoom are required.
-    map = new google.maps.Map(document.getElementById("map"), {
+    var geocoder = new google.maps.Geocoder();
+    map = new google.maps.Map(document.getElementById('map'), {
         center: {
             lat: 37.5539,
             lng: -122.3136
         },
         zoom: 11
     });
-
-    var highlightedIcon = makeMarkerIcon("642EFE");
+    var highlightedIcon = makeMarkerIcon('642EFE');
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
     // The following group uses the location array to create an array of markers on initialize.
-    for (i = 0; i < locations.length; i++) {
+    for (var i = 0; i < locations.length; i++) {
         // Get the position from the location array.
-        location = locations[i].location;
-        title = locations[i].title;
-        marker = new google.maps.Marker({
+        var location = locations[i].location;
+        var title = locations[i].title;
+        var marker = new google.maps.Marker({
             map: map,
             position: location,
             title: title,
@@ -326,51 +315,47 @@ function initMap() {
             id: i
         });
         markers.push(marker);
-        marker.addListener("click", function() {
+        marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
         });
         //  added custom animation for marker
-        marker.addListener("mouseover", function() {
+        marker.addListener('mouseover', function() {
             this.setIcon(highlightedIcon);
             toggleBounce(this);
         });
     }
-}
 
-/* 
- * Name - updateMapBasedOnFilterLocations
- * Args - locations object
- * Return - NA
- * Functionalities- Updates the current map and list view to display only the locations which match our search
- */
+} //end initMap function
+
 function updateMapBasedOnFilterLocations(locations) {
-    var highlightedIcon = makeMarkerIcon("642EFE");
+    var highlightedIcon = makeMarkerIcon('642EFE');
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
     // The following group uses the location array to create an array of markers on initialize.
-    for (i = 0; i < locations().length; i++) {
+    for (var i = 0; i < locations().length; i++) {
         // Get the position from the location array.
-        lat = locations()[i].lat();
-        lng = locations()[i].lng();
-        title = locations()[i].title();
+        var lat = locations()[i].lat();
+        var lng = locations()[i].lng();
+        var title = locations()[i].title();
         map.setCenter(new google.maps.LatLng(lat, lng));
         map.setZoom(15);
-        marker = new google.maps.Marker({
+        var marker = new google.maps.Marker({
             map: map,
             position: new google.maps.LatLng(lat, lng),
             title: title,
             id: i
         });
         markers.push(marker);
-        marker.addListener("click", function() {
+        marker.addListener('click', function() {
             populateInfoWindow(this, largeInfowindow);
         });
 
-        marker.addListener("mouseover", function() {
+        marker.addListener('mouseover', function() {
             this.setIcon(highlightedIcon);
             toggleBounce(this);
         });
     }
+
 } //end initMap function
 
 //function to populate the infowindow on click
@@ -378,10 +363,10 @@ function populateInfoWindow(marker, infowindow) {
     // Check to make sure the infowindow is not already opened on this marker.
     if (infowindow.marker != marker) {
         infowindow.marker = marker;
-        infowindow.setContent("<div>" + marker.title + "</div>");
+        infowindow.setContent('<div>' + marker.title + '</div>');
         infowindow.open(map, marker);
         // Make sure the marker property is cleared if the infowindow is closed.
-        infowindow.addListener("closeclick", function() {
+        infowindow.addListener('closeclick', function() {
             infowindow.setMarker = null;
         });
     }
@@ -389,21 +374,15 @@ function populateInfoWindow(marker, infowindow) {
 //added custom animation to marker
 function toggleBounce(marker) {
     marker.setAnimation(google.maps.Animation.BOUNCE);
-    marker.addListener("mouseout", function() {
+    marker.addListener('mouseout', function() {
         marker.setAnimation(null);
     })
 }
 
-/* 
- * Name - makeMarkerIcon
- * Args - marker color
- * Return - NA
- * Functionalities- creates a google map markr with custom color
- */
 function makeMarkerIcon(markerColor) {
-    markerImage = new google.maps.MarkerImage(
-        "http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|" + markerColor +
-        "|40|_|%E2%80%A2",
+    var markerImage = new google.maps.MarkerImage(
+        'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|' + markerColor +
+        '|40|_|%E2%80%A2',
         new google.maps.Size(22, 35),
         new google.maps.Point(0, 0),
         new google.maps.Point(10, 34),
