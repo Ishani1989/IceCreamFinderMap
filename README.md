@@ -22,8 +22,8 @@ jQuery version 3.2.1<br />
 
 ## External API Dependency
 
-Google Maps
-Foursquare
+Google Maps<br />
+Foursquare<br />
 
 ## How to run
 
@@ -39,6 +39,6 @@ First checkin done on June 17, 2017
 
 ## Credits
 
-ishanibhattacharjee@gmail.com
-https://stackoverflow.com
-http://opensoul.org/2011/06/23/live-search-with-knockoutjs/
+ishanibhattacharjee@gmail.com<br />
+https://stackoverflow.com<br />
+http://opensoul.org/2011/06/23/live-search-with-knockoutjs/<br />
