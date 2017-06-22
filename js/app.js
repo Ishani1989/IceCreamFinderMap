@@ -264,7 +264,7 @@ var nViewModel = function() {
                     icon: 'static/icrm.jpg'
                 });
                 markers.push(marker);
-                populateInfoWindow(this, largeInfowindow);
+                populateInfoWindow(marker, largeInfowindow);
             } //end for
         }); //end ajax call
     };
@@ -277,18 +277,21 @@ var nViewModel = function() {
         // remove all the current locations, which removes them from the view
         self.mylocations.removeAll();
         // populate the empty observable array with locations that matched our query
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+
         for (var loc in locations) {
             if (locations[loc].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
                 self.mylocations.push(new Location(locations[loc]));
+                markers[loc].setMap(map);
             } //end if
         } //end for
 
         //set markers on map for each searched location
-        for (var i = 0; i < markers.length; i++) {
-            markers[i].setMap(null);
-        }
-        markers = [];
-        updateMapBasedOnFilterLocations(self.mylocations);
+        
+        //markers = [];
+        //updateMapBasedOnFilterLocations(self.mylocations);
         if (value === "") {
             initMap();
         }
@@ -377,7 +380,7 @@ function populateInfoWindow(marker, infowindow) {
 }
 //added custom animation to marker
 function toggleBounce(marker, icon) {
-    marker.addListener('mouseover', function() {
+    marker.addListener('click', function() {
         marker.setIcon(icon);
         marker.setAnimation(google.maps.Animation.BOUNCE);
     });
