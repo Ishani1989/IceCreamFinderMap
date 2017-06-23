@@ -1,14 +1,3 @@
-// Hello.
-//
-// This is JSHint, a tool that helps to detect errors and potential
-// problems in your JavaScript code.
-//
-// To start, simply enter some JavaScript anywhere on this page. Your
-// report will appear on the right side.
-//
-// Additionally, you can toggle specific options in the Configure
-// menu.
-
 //create variable map to be rendered on view
 var map;
 // Create a new blank array for all the listing markers.
@@ -245,11 +234,19 @@ var nViewModel = function() {
             });
         // parse AJAX response to display on map
         $.ajax(settings).done(function(response) {
-            for (var ind in response.response.venues) {
+            for (ind in response.response.venues) {
                 venue = response.response.venues[ind];
                 var resname = venue.name;
                 var reslat = venue.location.lat;
                 var reslng = parseFloat(venue.location.lng);
+                var info = "Distance: within "+venue.location.distance+" meters."
+                if(venue.location.address===undefined){
+                    var address="";
+                }
+                else{
+                    address = venue.location.address;
+                }
+                var address = "Address: "+address+" "+venue.location.city+" "+venue.location.state;
                 var resloc = {
                     lat: reslat,
                     lng: reslng
@@ -264,7 +261,7 @@ var nViewModel = function() {
                     icon: 'static/icrm.jpg'
                 });
                 markers.push(marker);
-                populateInfoWindow(marker, largeInfowindow);
+                populateInfoWindow(marker, largeInfowindow, info, address);
             } //end for
         }); //end ajax call
     };
@@ -332,44 +329,22 @@ function initMap() {
         markers.push(marker);
         //  added custom animation for marker
         toggleBounce(marker, highlightedIcon);
-        populateInfoWindow(marker, largeInfowindow);
+        populateInfoWindow(marker, largeInfowindow, "", "");
         
     }
     
 } //end initMap function
 
-function updateMapBasedOnFilterLocations(locations) {
-    var highlightedIcon = makeMarkerIcon('642EFE');
-    var largeInfowindow = new google.maps.InfoWindow();
-    var bounds = new google.maps.LatLngBounds();
-    // The following group uses the location array to create an array of markers on initialize.
-    for (var i = 0; i < locations().length; i++) {
-        // Get the position from the location array.
-        var lat = locations()[i].lat();
-        var lng = locations()[i].lng();
-        var title = locations()[i].title();
-        map.setCenter(new google.maps.LatLng(lat, lng));
-        map.setZoom(15);
-        var marker = new google.maps.Marker({
-            map: map,
-            position: new google.maps.LatLng(lat, lng),
-            title: title,
-            id: i
-        });
-        markers.push(marker);
-        toggleBounce(marker, highlightedIcon);
-        populateInfoWindow(marker, largeInfowindow);
-    }
-
-} //end initMap function
-
 //function to populate the infowindow on click
-function populateInfoWindow(marker, infowindow) {
+function populateInfoWindow(marker, infowindow, info, address) {
     // Check to make sure the infowindow is not already opened on this marker.
     marker.addListener('click', function() {
         if (infowindow.marker != marker) {
             infowindow.marker = marker;
-            infowindow.setContent('<div>' +"Welcome to "+marker.title + '</div>');
+            if (info===undefined){
+                info="";
+            }
+            infowindow.setContent('<div>' +"Welcome to "+marker.title + "<br />" +info + "<br />"+address+'</div>');
             infowindow.open(map, marker);
             // Make sure the marker property is cleared if the infowindow is closed.
             infowindow.addListener('closeclick', function() {
