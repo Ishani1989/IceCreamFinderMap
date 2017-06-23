@@ -1,7 +1,7 @@
 // CONSTANTS 
-FOUR_SQUARE_API_TOKEN  = "EGIVZV20P2M153FGX3NIDOIKWX1QOXXUNEOQPZNFKGWUIVMF";
-FOUR_SQUARE_BASE_URL =  "https://api.foursquare.com/v2/venues/search?oauth_token=";
-APPLICATION_NAME = "My Caltrain Ice Cream Finder";
+var FOUR_SQUARE_API_TOKEN  = "EGIVZV20P2M153FGX3NIDOIKWX1QOXXUNEOQPZNFKGWUIVMF";
+var FOUR_SQUARE_BASE_URL =  "https://api.foursquare.com/v2/venues/search?oauth_token=";
+var APPLICATION_NAME = "My Caltrain Ice Cream Finder";
 
 //create variable map to be rendered on view
 var map;
@@ -93,14 +93,16 @@ var ViewModel = function() {
                 var reslat = venue.location.lat;
                 var reslng = parseFloat(venue.location.lng);
                 var info = "Distance: within "+venue.location.distance+" meters.";
+                var add;
+                var newcity;
                 if(venue.location.address===undefined){
-                    var add="";
+                    add="";
                 }
                 else{
                     add = venue.location.address;
                 }
                 if(venue.location.city===undefined){
-                    var newcity="";
+                    newcity="";
                 }
                 else{
                     newcity = venue.location.city;
