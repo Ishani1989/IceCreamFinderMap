@@ -64,11 +64,12 @@ var ViewModel = function() {
         }
 
         for (i = 0; i < markers.length; i++) {
+            markers[i].setVisible(false);
             if (location.title === markers[i].title) {
+                markers[i].setVisible(true);
                 markers[i].setIcon(highlightedIcon);
                 markers[i].setAnimation(google.maps.Animation.BOUNCE);
-                break;
-            }
+           }
         }
         //set the center of the map and other tokens for Foursquare API Call
         map.setCenter(new google.maps.LatLng(lat, lng));
@@ -172,6 +173,7 @@ function initMap() {
     var bounds = new google.maps.LatLngBounds();
     highlightedIcon = makeMarkerIcon('642EFE');
     var markerloc;
+
     // The following group uses the location array to create an array of markers on initialize.
     for (var i = 0; i < locations.length; i++) {
         // Get the position from the location array.
