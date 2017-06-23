@@ -43,8 +43,8 @@ var locations = [{
     {
         title: 'Broadway',
         location: {
-            lat: 37.795939,
-            lng: -122.421890
+            lat: 37.5875,
+            lng: -122.3627
         }
     },
     {

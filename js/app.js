@@ -1,6 +1,6 @@
 // CONSTANTS 
-var FOUR_SQUARE_API_TOKEN  = "EGIVZV20P2M153FGX3NIDOIKWX1QOXXUNEOQPZNFKGWUIVMF";
-var FOUR_SQUARE_BASE_URL =  "https://api.foursquare.com/v2/venues/search?oauth_token=";
+var FOUR_SQUARE_API_TOKEN = "EGIVZV20P2M153FGX3NIDOIKWX1QOXXUNEOQPZNFKGWUIVMF";
+var FOUR_SQUARE_BASE_URL = "https://api.foursquare.com/v2/venues/search?oauth_token=";
 var APPLICATION_NAME = "My Caltrain Ice Cream Finder";
 
 //create variable map to be rendered on view
@@ -17,7 +17,7 @@ var Location = function(data) {
 var highlightedIcon;
 
 function handleError() {
-    
+
     $('#map').html("<img src='static/error.jpg' alt='Smiley sorry face'/>");
     $('#map').append("<br/><br/><span style='color:red'><b>Google maps failed to load . Please check your internet connection and try again.</b></span>");
 }
@@ -34,7 +34,7 @@ if (dd < 10) {
 if (mm < 10) {
     mm = '0' + mm;
 }
-today = yyyy + mm + dd; 
+today = yyyy + mm + dd;
 
 // Create viewmodel using knockout.js
 var ViewModel = function() {
@@ -63,11 +63,11 @@ var ViewModel = function() {
             }
         }
 
-        for(var i=0; i<markers.length;i++){
-            if (location.title===markers[i].title){
+        for (i = 0; i < markers.length; i++) {
+            if (location.title === markers[i].title) {
                 markers[i].setIcon(highlightedIcon);
                 markers[i].setAnimation(google.maps.Animation.BOUNCE);
-            break;
+                break;
             }
         }
         //set the center of the map and other tokens for Foursquare API Call
@@ -83,36 +83,33 @@ var ViewModel = function() {
             "url": foursqrurl,
             "method": "GET"
         };
-      
+
         //Handle error for AJAX request
         $(document).ajaxError(
             function(event, jqXHR, ajaxSettings, thrownError) {
                 $(".error").html("The server responded with " + thrownError.toLowerCase() + " error. Please check all parameters and try again");
             });
         // parse AJAX response to display on map
-        // Teddy
         $.ajax(settings).done(function(response) {
-            for (ind = 0; ind < response.response.venues.length; ind++) {    
+            for (ind = 0; ind < response.response.venues.length; ind++) {
                 venue = response.response.venues[ind];
                 var resname = venue.name;
                 var reslat = venue.location.lat;
                 var reslng = parseFloat(venue.location.lng);
-                var info = "Distance: within "+venue.location.distance+" meters.";
+                var info = "Distance: within " + venue.location.distance + " meters.";
                 var add;
                 var newcity;
-                if(venue.location.address===undefined){
-                    add="";
-                }
-                else{
+                if (venue.location.address === undefined) {
+                    add = "";
+                } else {
                     add = venue.location.address;
                 }
-                if(venue.location.city===undefined){
-                    newcity="";
-                }
-                else{
+                if (venue.location.city === undefined) {
+                    newcity = "";
+                } else {
                     newcity = venue.location.city;
                 }
-                var address = "Address: "+add+" "+newcity+" "+venue.location.state;
+                var address = "Address: " + add + " " + newcity + " " + venue.location.state;
                 var resloc = {
                     lat: reslat,
                     lng: reslng
@@ -141,20 +138,18 @@ var ViewModel = function() {
         self.mylocations.removeAll();
         // populate the empty observable array with locations that matched our query
         for (var i = 0; i < markers.length; i++) {
-            markers[i].setMap(null);
+            markers[i].setVisible(false);
         }
 
         for (var loc = 0; loc < locations.length; loc++) {
             if (locations[loc].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
                 self.mylocations.push(new Location(locations[loc]));
-                markers[loc].setMap(map);
+                markers[loc].setVisible(true);
             } //end if
         } //end for
 
         //updateMapBasedOnFilterLocations(self.mylocations);
-        if (value === "") {
-            initMap();
-        }
+
     }; // end search
 }; //end viewmodel
 
@@ -189,16 +184,16 @@ function initMap() {
             title: title,
             animation: google.maps.Animation.DROP,
             id: i
-        }); 
+        });
         markers.push(marker);
         //  added custom animation for marker
         toggleBounce(marker, highlightedIcon);
         populateInfoWindow(marker, largeInfowindow, "", "");
         setMapOnClick(marker, markerloc);
         //marker.addListener('click', myViewModel.setMap(markerloc));
-        
+
     }
-    
+
 } //end initMap function
 
 //function to populate the infowindow on click
@@ -206,10 +201,10 @@ function populateInfoWindow(marker, infowindow, info, address) {
     // Check to make sure the infowindow is not already opened on this marker.
     marker.addListener('click', function() {
         infowindow.marker = marker;
-        if (info===undefined){
-            info="";
+        if (info === undefined) {
+            info = "";
         }
-        infowindow.setContent('<div>' +"Welcome to "+marker.title + "<br />" +info + "<br />"+address+'</div>');
+        infowindow.setContent('<div>' + "Welcome to " + marker.title + "<br />" + info + "<br />" + address + '</div>');
         infowindow.open(map, marker);
         // Make sure the marker property is cleared if the infowindow is closed.
         infowindow.addListener('closeclick', function() {
@@ -240,7 +235,7 @@ function makeMarkerIcon(markerColor) {
     return markerImage;
 }
 
-function setMapOnClick(marker, location){
+function setMapOnClick(marker, location) {
     marker.addListener('click', function() {
         myViewModel.setMap(location);
     });
