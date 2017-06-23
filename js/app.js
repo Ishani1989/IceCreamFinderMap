@@ -187,8 +187,23 @@ if (mm < 10) {
 }
 today = yyyy + mm + dd;
 
+$.getScript( "https://maps.googleapis.com/maps/api/js?key=AIzaSyD9h_dzskR64wDAx9wBmATcu4Ik8lRsNrg&v=3&libraries=geometry&callback=initMap" )
+  .done(function( script, textStatus ) {
+    initMap();
+    
+  })
+  .fail(function( jqxhr, settings, exception ) {
+    
+    $("#map").html("<img src='static/error.jpg' alt='Smiley sorry face'/>");
+    $("#map").append("<br/><br/><span style='color:red'><b>Google maps failed to load . Please check your internet connection and try again.</b></span>");
+});
+
+    $.getJSON("test.json", function(json) {
+        console.log(json); // this will show the info it in firebug console
+    });
+
 // Create viewmodel using knockout.js
-var nViewModel = function() {
+var ViewModel = function() {
 
     var self = this;
     this.heading = ko.observable("My Caltrain Ice Cream Finder");
@@ -233,8 +248,10 @@ var nViewModel = function() {
                 $(".error").html("The server responded with " + thrownError.toLowerCase() + " error. Please check all parameters and try again");
             });
         // parse AJAX response to display on map
+        // Teddy
         $.ajax(settings).done(function(response) {
-            for (ind in response.response.venues) {
+            for (ind = 0; ind < response.response.venues.length; ind++) {    
+                console.log('ind existing - ' + ind);
                 venue = response.response.venues[ind];
                 var resname = venue.name;
                 var reslat = venue.location.lat;
@@ -278,7 +295,7 @@ var nViewModel = function() {
             markers[i].setMap(null);
         }
 
-        for (var loc in locations) {
+        for (var loc = 0; loc < locations.length; loc++) {
             if (locations[loc].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
                 self.mylocations.push(new Location(locations[loc]));
                 markers[loc].setMap(map);
@@ -295,7 +312,7 @@ var nViewModel = function() {
     }; // end search
 }; //end viewmodel
 
-var myViewModel = new nViewModel();
+var myViewModel = new ViewModel();
 // perform search query on nView model
 myViewModel.query.subscribe(myViewModel.search);
 ko.applyBindings(myViewModel);
