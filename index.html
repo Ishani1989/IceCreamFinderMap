@@ -10,16 +10,15 @@
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       <link rel="stylesheet" href="css/styles.css">
    </head>
-   <body style="height: 100%; padding: 0px; margin: 0px">
-      <div class="error">
-      </div>
-      <div class = "strip">
-         <h1 data-bind="text:heading"></h1>
-      </div>
+   <body>
+   <header class = "strip">
+      <h1 data-bind="text:heading"></h1>
+   </header>
       <div id="map" class="right"></div>
       <div class="left">
          <div class ="search">
             <input id ="searchtext" placeholder="Search…" type="search" data-bind="value: query, input: mylocations, valueUpdate: 'keyup'," autocomplete="off">
+            <input type="button" value="Reset" id ="home" class="btn btn-info">
          </div>
          <div class = "scroll">
             <ul class="list-group" data-bind = "foreach:mylocations">
@@ -27,6 +26,9 @@
             </ul>
          </div>
       </div>
+      <footer>
+         <p>Contact information: <a href="mailto:someone@example.com">ishmukherjee89@gmail.com</a>.</p>
+      </footer>
    </body>
    <script src ="js/locations-data.js"></script>
    <script src ="js/app.js"></script>

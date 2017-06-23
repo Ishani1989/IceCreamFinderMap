@@ -1,179 +1,19 @@
+// CONSTANTS 
+FOUR_SQUARE_API_TOKEN  = "EGIVZV20P2M153FGX3NIDOIKWX1QOXXUNEOQPZNFKGWUIVMF";
+FOUR_SQUARE_BASE_URL =  "https://api.foursquare.com/v2/venues/search?oauth_token=";
+APPLICATION_NAME = "My Caltrain Ice Cream Finder";
+
 //create variable map to be rendered on view
 var map;
 // Create a new blank array for all the listing markers.
 var markers = [];
-//Create Location function to hold location attributes for rendered map
+
 var Location = function(data) {
-    this.title = ko.observable(data.title);
-    this.lat = ko.observable(data.location.lat);
-    this.lng = ko.observable(data.location.lng);
+    this.title = data.title;
+    this.lat = data.location.lat;
+    this.lng = data.location.lng;
 };
 
-//Create static data for initial load of locations
-/*
-var locations = [{
-        title: 'San Francisco',
-        location: {
-            lat: 37.774929,
-            lng: -122.419416
-        }
-    },
-    {
-        title: '22nd Street',
-        location: {
-            lat: 37.7575,
-            lng: -122.3924
-        }
-    },
-    {
-        title: 'Bayshore',
-        location: {
-            lat: 37.7076,
-            lng: -122.4017
-        }
-    },
-    {
-        title: 'South San Francisco',
-        location: {
-            lat: 37.654656,
-            lng: -122.407750
-        }
-    },
-    {
-        title: 'San Bruno',
-        location: {
-            lat: 37.630490,
-            lng: -122.411084
-        }
-    },
-    {
-        title: 'Millbrae Transit Center',
-        location: {
-            lat: 37.600156,
-            lng: -122.386936
-        }
-    },
-    {
-        title: 'Broadway',
-        location: {
-            lat: 37.795939,
-            lng: -122.421890
-        }
-    },
-    {
-        title: 'Burlingame',
-        location: {
-            lat: 37.577870,
-            lng: -122.348090
-        }
-    },
-    {
-        title: 'San Mateo',
-        location: {
-            lat: 37.562992,
-            lng: -122.325525
-        }
-    },
-    {
-        title: 'Hillsdale',
-        location: {
-            lat: 37.781611,
-            lng: -122.409347
-        }
-    },
-    {
-        title: 'Belmont',
-        location: {
-            lat: 37.525016,
-            lng: -122.266873
-        }
-    },
-    {
-        title: 'San Carlos',
-        location: {
-            lat: 37.507159,
-            lng: -122.260522
-        }
-    },
-    {
-        title: 'Redwood City',
-        location: {
-            lat: 37.485215,
-            lng: -122.236355
-        }
-    },
-    {
-        title: 'Atherton',
-        location: {
-            lat: 37.461327,
-            lng: -122.197743
-        }
-    },
-    {
-        title: 'Menlo Park',
-        location: {
-            lat: 37.452960,
-            lng: -122.181725
-        }
-    },
-    {
-        title: 'Palo Alto',
-        location: {
-            lat: 37.441883,
-            lng: -122.143019
-        }
-    },
-    {
-        title: 'California Ave.',
-        location: {
-            lat: 37.422846,
-            lng: -122.147697
-        }
-    },
-    {
-        title: 'San Antonio',
-        location: {
-            lat: 37.407221,
-            lng: -122.107126
-        }
-    },
-    {
-        title: 'Mountain View',
-        location: {
-            lat: 37.386052,
-            lng: -122.083851
-        }
-    },
-    {
-        title: 'Sunnyvale',
-        location: {
-            lat: 37.378426,
-            lng: -122.030778
-        }
-    },
-    {
-        title: 'Lawrence',
-        location: {
-            lat: 37.370412,
-            lng: -121.995984
-        }
-    },
-    {
-        title: 'Santa Clara',
-        location: {
-            lat: 37.353227,
-            lng: -121.936453
-        }
-    },
-    {
-        title: 'San Jose',
-        location: {
-            lat: 37.329905,
-            lng: -121.902502
-        }
-    }
-];
-*/
 // Get the current date for api call version
 var today = new Date();
 var dd = today.getDate();
@@ -187,6 +27,8 @@ if (mm < 10) {
     mm = '0' + mm;
 }
 today = yyyy + mm + dd;
+
+$('#home').click(initMap);
 
 $.getScript( "https://maps.googleapis.com/maps/api/js?key=AIzaSyD9h_dzskR64wDAx9wBmATcu4Ik8lRsNrg&v=3&libraries=geometry&callback=initMap" )
   .done(function( script, textStatus ) {
@@ -203,7 +45,7 @@ $.getScript( "https://maps.googleapis.com/maps/api/js?key=AIzaSyD9h_dzskR64wDAx9
 var ViewModel = function() {
 
     var self = this;
-    this.heading = ko.observable("My Caltrain Ice Cream Finder");
+    this.heading = ko.observable(APPLICATION_NAME);
     this.error = ko.observable();
 
     this.mylocations = ko.observableArray([]);
@@ -219,9 +61,9 @@ var ViewModel = function() {
         var lng = "";
 
         for (var i = 0; i < self.mylocations().length; i++) {
-            if (self.mylocations()[i].title() === location.title()) {
-                lat = location.lat();
-                lng = location.lng();
+            if (self.mylocations()[i].title === location.title) {
+                lat = location.lat;
+                lng = location.lng;
                 break;
             }
         }
@@ -229,8 +71,8 @@ var ViewModel = function() {
         map.setCenter(new google.maps.LatLng(lat, lng));
         map.setZoom(15);
         date = today;
-        var token = "EGIVZV20P2M153FGX3NIDOIKWX1QOXXUNEOQPZNFKGWUIVMF";
-        var foursqrurl = "https://api.foursquare.com/v2/venues/search?oauth_token=" + token + "&v=" + date + "&ll=" + lat + ',' + lng + "&query=ice%20cream&intent=checkin&limit=5&radius=2000";
+
+        var foursqrurl = FOUR_SQUARE_BASE_URL + FOUR_SQUARE_API_TOKEN + "&v=" + date + "&ll=" + lat + ',' + lng + "&query=ice%20cream&intent=checkin&limit=5&radius=2000";
 
         var settings = {
             "async": true,
@@ -252,14 +94,14 @@ var ViewModel = function() {
                 var resname = venue.name;
                 var reslat = venue.location.lat;
                 var reslng = parseFloat(venue.location.lng);
-                var info = "Distance: within "+venue.location.distance+" meters."
+                var info = "Distance: within "+venue.location.distance+" meters.";
                 if(venue.location.address===undefined){
-                    var address="";
+                    var add="";
                 }
                 else{
-                    address = venue.location.address;
+                    add = venue.location.address;
                 }
-                var address = "Address: "+address+" "+venue.location.city+" "+venue.location.state;
+                var address = "Address: "+add+" "+venue.location.city+" "+venue.location.state;
                 var resloc = {
                     lat: reslat,
                     lng: reslng
@@ -298,9 +140,6 @@ var ViewModel = function() {
             } //end if
         } //end for
 
-        //set markers on map for each searched location
-        
-        //markers = [];
         //updateMapBasedOnFilterLocations(self.mylocations);
         if (value === "") {
             initMap();

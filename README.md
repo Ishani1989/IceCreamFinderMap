@@ -28,6 +28,10 @@ Foursquare<br />
 ## How to run
 
 Run the index.html file to view the project.
+Click on marker displayed to change color, make it jump and display the location name.
+Type something into the Search text box to filter location list based on search.
+Click on a location from list below to fetch all ice cream centers within 2km radius.
+Click on ice cream icon on map to view address.
 
 ## Tested Env
 

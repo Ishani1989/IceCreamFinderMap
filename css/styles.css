@@ -4,6 +4,7 @@
       width: 80%;
       height: 90%;
   }
+
   /*content area for list and search input*/
   .left {
       float: left;
@@ -11,10 +12,12 @@
       height: 90%;
       background-color: #F2F5A9;
   }
+
   html,
   body {
       height: 100%;
   }
+
   /*content area for header*/
   .strip {
       height: 10%;
@@ -23,15 +26,18 @@
       background-image: url("../static/headerimg.jpg");
       padding: 0px;
   }
+
   /*css changes for list item hover*/
   a.list-group-item-action:hover {
       background-color: #5858FA;
       color: white;
       font-weight: bold;
   }
+
   a.list-group-item-action {
       color: blue;
   }
+
   /*css for list group*/
   .list-group-item {
       position: relative;
@@ -40,6 +46,7 @@
       margin-bottom: -1px;
       border: 1px solid #FFC300;
   }
+
   .list-group-item-action {
       position: relative;
       display: block;
@@ -49,24 +56,29 @@
       border: 1px solid #FFC300;
       font-style: italic;
   }
+
   h1 {
       margin-top: 0;
       color: #0000FF;
       text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
   }
+
   #searchtext {
-      width: 100%;
+      width: 70%;
       height: 100%;
   }
+
   /*css for list scroll div*/
   .scroll {
       max-height: 95%;
       overflow-y: scroll;
   }
+
   /*sets height for search text box*/
   .search {
-      height: 5%;
+      height: 8%;
   }
+
   /*css for error handling*/
   .error {
       font-weight: bold;
