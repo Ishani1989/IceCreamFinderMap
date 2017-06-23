@@ -14,6 +14,14 @@ var Location = function(data) {
     this.lng = data.location.lng;
 };
 
+var highlightedIcon;
+
+function handleError() {
+    
+    $('#map').html("<img src='static/error.jpg' alt='Smiley sorry face'/>");
+    $('#map').append("<br/><br/><span style='color:red'><b>Google maps failed to load . Please check your internet connection and try again.</b></span>");
+}
+
 // Get the current date for api call version
 var today = new Date();
 var dd = today.getDate();
@@ -27,17 +35,6 @@ if (mm < 10) {
     mm = '0' + mm;
 }
 today = yyyy + mm + dd; 
-
-$.getScript( "https://maps.googleapis.com/maps/api/js?key=AIzaSyD9h_dzskR64wDAx9wBmATcu4Ik8lRsNrg&v=3&libraries=geometry&callback=initMap" )
-  .done(function( script, textStatus ) {
-    initMap();
-    
-  })
-  .fail(function( jqxhr, settings, exception ) {
-    
-    $("#map").html("<img src='static/error.jpg' alt='Smiley sorry face'/>");
-    $("#map").append("<br/><br/><span style='color:red'><b>Google maps failed to load . Please check your internet connection and try again.</b></span>");
-});
 
 // Create viewmodel using knockout.js
 var ViewModel = function() {
@@ -63,6 +60,14 @@ var ViewModel = function() {
                 lat = location.lat;
                 lng = location.lng;
                 break;
+            }
+        }
+
+        for(var i=0; i<markers.length;i++){
+            if (location.title===markers[i].title){
+                markers[i].setIcon(highlightedIcon);
+                markers[i].setAnimation(google.maps.Animation.BOUNCE);
+            break;
             }
         }
         //set the center of the map and other tokens for Foursquare API Call
@@ -168,14 +173,16 @@ function initMap() {
         },
         zoom: 11
     });
-    var highlightedIcon = makeMarkerIcon('642EFE');
     var largeInfowindow = new google.maps.InfoWindow();
     var bounds = new google.maps.LatLngBounds();
+    highlightedIcon = makeMarkerIcon('642EFE');
+    var markerloc;
     // The following group uses the location array to create an array of markers on initialize.
     for (var i = 0; i < locations.length; i++) {
         // Get the position from the location array.
         var location = locations[i].location;
         var title = locations[i].title;
+        markerloc = new Location(locations[i]);
         var marker = new google.maps.Marker({
             map: map,
             position: location,
@@ -183,11 +190,12 @@ function initMap() {
             animation: google.maps.Animation.DROP,
             id: i
         }); 
-
         markers.push(marker);
         //  added custom animation for marker
         toggleBounce(marker, highlightedIcon);
         populateInfoWindow(marker, largeInfowindow, "", "");
+        setMapOnClick(marker, markerloc);
+        //marker.addListener('click', myViewModel.setMap(markerloc));
         
     }
     
@@ -230,4 +238,10 @@ function makeMarkerIcon(markerColor) {
         new google.maps.Point(10, 34),
         new google.maps.Size(22, 35));
     return markerImage;
+}
+
+function setMapOnClick(marker, location){
+    marker.addListener('click', function() {
+        myViewModel.setMap(location);
+    });
 }
