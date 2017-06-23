@@ -26,9 +26,7 @@ if (dd < 10) {
 if (mm < 10) {
     mm = '0' + mm;
 }
-today = yyyy + mm + dd;
-
-$('#home').click(initMap);
+today = yyyy + mm + dd; 
 
 $.getScript( "https://maps.googleapis.com/maps/api/js?key=AIzaSyD9h_dzskR64wDAx9wBmATcu4Ik8lRsNrg&v=3&libraries=geometry&callback=initMap" )
   .done(function( script, textStatus ) {
@@ -101,7 +99,13 @@ var ViewModel = function() {
                 else{
                     add = venue.location.address;
                 }
-                var address = "Address: "+add+" "+venue.location.city+" "+venue.location.state;
+                if(venue.location.city===undefined){
+                    var newcity="";
+                }
+                else{
+                    newcity = venue.location.city;
+                }
+                var address = "Address: "+add+" "+newcity+" "+venue.location.state;
                 var resloc = {
                     lat: reslat,
                     lng: reslng
@@ -191,20 +195,19 @@ function initMap() {
 function populateInfoWindow(marker, infowindow, info, address) {
     // Check to make sure the infowindow is not already opened on this marker.
     marker.addListener('click', function() {
-        if (infowindow.marker != marker) {
-            infowindow.marker = marker;
-            if (info===undefined){
-                info="";
-            }
-            infowindow.setContent('<div>' +"Welcome to "+marker.title + "<br />" +info + "<br />"+address+'</div>');
-            infowindow.open(map, marker);
-            // Make sure the marker property is cleared if the infowindow is closed.
-            infowindow.addListener('closeclick', function() {
-                infowindow.setMarker = null;
-            });
+        infowindow.marker = marker;
+        if (info===undefined){
+            info="";
         }
+        infowindow.setContent('<div>' +"Welcome to "+marker.title + "<br />" +info + "<br />"+address+'</div>');
+        infowindow.open(map, marker);
+        // Make sure the marker property is cleared if the infowindow is closed.
+        infowindow.addListener('closeclick', function() {
+            infowindow.setMarker = null;
+        });
     });
 }
+
 //added custom animation to marker
 function toggleBounce(marker, icon) {
     marker.addListener('click', function() {
