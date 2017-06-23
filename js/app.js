@@ -10,6 +10,7 @@ var Location = function(data) {
 };
 
 //Create static data for initial load of locations
+/*
 var locations = [{
         title: 'San Francisco',
         location: {
@@ -172,7 +173,7 @@ var locations = [{
         }
     }
 ];
-
+*/
 // Get the current date for api call version
 var today = new Date();
 var dd = today.getDate();
@@ -197,10 +198,6 @@ $.getScript( "https://maps.googleapis.com/maps/api/js?key=AIzaSyD9h_dzskR64wDAx9
     $("#map").html("<img src='static/error.jpg' alt='Smiley sorry face'/>");
     $("#map").append("<br/><br/><span style='color:red'><b>Google maps failed to load . Please check your internet connection and try again.</b></span>");
 });
-
-    $.getJSON("test.json", function(json) {
-        console.log(json); // this will show the info it in firebug console
-    });
 
 // Create viewmodel using knockout.js
 var ViewModel = function() {
@@ -251,7 +248,6 @@ var ViewModel = function() {
         // Teddy
         $.ajax(settings).done(function(response) {
             for (ind = 0; ind < response.response.venues.length; ind++) {    
-                console.log('ind existing - ' + ind);
                 venue = response.response.venues[ind];
                 var resname = venue.name;
                 var reslat = venue.location.lat;
